@@ -1,0 +1,275 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+}
+
+/* サイドバー */
+.sidebar {
+    width: 300px;
+    color: #4B4B4B;
+    height: 100vh;
+    position: fixed;
+    background-color: white;
+}
+
+.sidebar-header {
+    align-items: center;
+    margin-bottom: 60px;
+    margin-top: 90px;
+}
+
+.site-icon-container{
+    text-align: center;
+}
+
+.site-name-container{
+    text-align: center;
+    margin-top: 28px;
+}
+
+.site-icon {
+    width: 130px;
+    height: 130px;
+    display: inline;
+}
+
+.site-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.sidebar ul {
+    list-style: none;
+    width: 80%;
+    margin: auto;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    color: #4B4B4B;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.sidebar ul li a:hover {
+    color: #3F82ED;
+}
+
+.sidebar ul li .btn{
+    color: #4B4B4B;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: none;  /* buttonタグの場合、デフォルトのボーダーを削除 */
+    cursor: pointer;  /* buttonタグにマウスカーソルを追加 */
+    background-color: transparent;
+    font-size: 16px;
+}
+
+.sidebar ul li .btn:hover {
+    color: #2980b9;
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* メインメニュー */
+.main-content {
+    margin-left: 300px; 
+    flex-grow: 1;
+    background-color: #BCCDE5; 
+    min-height: 100vh; 
+    width: 100%;
+}
+
+.main-content h1 {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #808287;
+    width: 90%;
+    font-size: 32px;
+    color: #4B4B4B;
+    margin-left: 40px;
+    padding-top: 45px;
+    padding-bottom: 45px;
+}
+
+/* 検索バー */
+.main-header{
+    height: 100px;
+    background-color: #3F82ED;
+    align-items: center;
+    display: flex;
+}
+
+#form1{
+    display: flex;
+    margin-left: 40px;
+    height:50px;/*高さ*/
+}
+
+#sbox1{
+    width:250px;/*横幅*/
+    padding:0 15px;/*プレースホルダーの位置調整*/
+    border-radius:4px 0 0 4px;/*左側の角を少し丸める*/		
+    background:#eee;/*検背景カラー*/
+    border:none;/*枠線を消す*/ 
+    outline:0;/*クリック時の青い枠線消す*/	
+}
+
+#sbtn1{
+    width:70px;/*横幅*/ 
+    border-radius:0 4px 4px 0;/*右側の角を少し丸める*/ 
+    background:#7fbfff;/*背景カラー*/ 
+    border:none;/*枠線を消す*/ 
+    color:#fff;/*テキストカラー*/ 
+    font-size:16px;/*フォントサイズ指定*/ 
+    cursor: pointer;/*マウスを乗せると指差しポインターになる*/
+}
+
+#sbtn1:hover {
+    background: #92dbff;/*背景カラー変更*/
+}
+
+/* 絞り込み */
+/* 並び替えのコンテナスタイル */
+.sort-container {
+    display: flex;
+    align-items: center;
+    margin-top: 45px;
+    margin-bottom: 45px;
+    margin-left: 40px;
+}
+
+/* フォームのスタイル */
+
+#sort-form label{
+    margin-right: 10px;
+    color: #4B4B4B;
+}
+
+/* プルダウンのスタイル */
+.sort-select {
+    padding: 5px;
+    font-size: 14px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    background-color: #3F82ED;
+    color: white;
+}
+
+/* テーブル */
+/* テーブル全体のスタイル */
+.center-table {
+    width: 90%;
+    border-collapse: collapse;
+    margin-left: 40px;
+}
+
+/* ヘッダーのスタイル */
+.center-table th {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center; /* 水平方向に中央揃え */
+    vertical-align: middle; /* 垂直方向に中央揃え */
+    font-weight: normal;
+    color: #4B4B4B;
+}
+
+/* データセルのスタイル */
+.center-table td {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center; /* 水平方向に中央揃え */
+    vertical-align: middle; /* 垂直方向に中央揃え */
+    font-weight: bold;
+    color: #4B4B4B;
+    font-size: 24px;
+}
+
+/* ハンバーガーメニュー */
+.menu-icon {
+    font-size: 30px;
+    cursor: pointer;
+    display: none; /*初期は非表示*/
+}
+
+/* タブレット */
+@media (max-width: 960px) {
+    /* サイドバー */
+    .sidebar {
+        width: 200px;
+    }
+    .main-content {
+        margin-left: 200px; 
+    }
+    .site-icon {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+/* スマホ */
+@media (max-width: 430px) {
+
+    /* ハンバーガーメニュー */
+    .menu-icon {
+        display: block; /* 小さい画面でハンバーガーメニューを表示 */
+        position: absolute;
+        z-index: 10000;
+    }
+
+    .sidebar {
+        transform: translateX(-100%); /*初期状態では非表示*/
+        width: 100%;
+        transition: transform 0.5s ease; /* 左右の動きに0.5秒のトランジションを設定 */
+    }
+
+    .sidebar.active {
+        transform: translateX(0); /* メニューを表示 */     
+    }
+
+    .main-content {
+        margin-left: 0px; 
+    }
+
+    /* テーブル */
+    .center-table {
+        margin: auto;
+    }
+
+    /* タイトル */
+    .main-content h1 {
+        margin: auto;
+        padding-top: 45px;
+        padding-bottom: 45px;
+    }
+
+    /* 検索バー */
+    .main-header-container{
+        width: 90%;
+        margin: auto;
+    }
+}

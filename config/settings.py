@@ -130,3 +130,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 認証
 AUTH_USER_MODEL="accounts.Account"
+
+# logout_url
+LOGOUT_REDIRECT_URL = '/logout/'  # ログアウト後にリダイレクトされるページを指定
