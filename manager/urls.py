@@ -1,3 +1,6 @@
+from django.urls import path
+from .views import Linewebhook
+
 urlpatterns=[
-    # TODO
+    path("callback/",Linewebhook.as_view()),
 ]

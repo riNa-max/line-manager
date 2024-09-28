@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import LineAccount,LineMessage
 
-# Register your models here.
+admin.site.register(LineAccount)
+admin.site.register(LineMessage)

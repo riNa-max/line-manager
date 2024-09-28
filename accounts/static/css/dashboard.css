@@ -1,3 +1,5 @@
+html { font-size: 62.5%; }
+
 * {
     margin: 0;
     padding: 0;
@@ -40,7 +42,7 @@ body {
 }
 
 .site-name {
-    font-size: 1.5rem;
+    font-size: 2.4rem;
     font-weight: bold;
 }
 .sidebar ul {
@@ -51,6 +53,7 @@ body {
 
 .sidebar ul li {
     margin: 15px 0;
+    font-size: 1.6rem;
 }
 
 .sidebar ul li a {
@@ -103,7 +106,7 @@ body {
     margin-bottom: 20px;
     border-bottom: 1px solid #808287;
     width: 90%;
-    font-size: 32px;
+    font-size: 3.2rem;
     color: #4B4B4B;
     margin-left: 40px;
     padding-top: 45px;
@@ -141,13 +144,27 @@ body {
     color:#fff;/*テキストカラー*/ 
     font-size:16px;/*フォントサイズ指定*/ 
     cursor: pointer;/*マウスを乗せると指差しポインターになる*/
+    margin-right: 20px;
 }
 
 #sbtn1:hover {
     background: #92dbff;/*背景カラー変更*/
 }
 
-/* 絞り込み */
+/* 戻るボタン */
+#sbtn2 button{
+    width:70px;/*横幅*/ 
+    border-radius:4px;/*右側の角を少し丸める*/ 
+    background:#7fbfff;/*背景カラー*/ 
+    border:none;/*枠線を消す*/ 
+    color:#fff;/*テキストカラー*/ 
+    font-size:16px;/*フォントサイズ指定*/ 
+    cursor: pointer;/*マウスを乗せると指差しポインターになる*/
+    padding:0 15px;/*プレースホルダーの位置調整*/
+    height: 100%;
+}
+
+/* 並び替え */
 /* 並び替えのコンテナスタイル */
 .sort-container {
     display: flex;
@@ -158,16 +175,16 @@ body {
 }
 
 /* フォームのスタイル */
-
 #sort-form label{
     margin-right: 10px;
     color: #4B4B4B;
+    font-size: 1.6rem;
 }
 
 /* プルダウンのスタイル */
 .sort-select {
     padding: 5px;
-    font-size: 14px;
+    font-size: 1.4rem;
     margin-right: 10px;
     border: 1px solid #ccc;
     border-radius: 50px;
@@ -178,12 +195,43 @@ body {
     color: white;
 }
 
+/* 絞り込み */
+#filter-form{
+    margin-left: 20px;
+}
+
+#filter-form label{
+    margin-right: 10px;
+    color: #4B4B4B;
+    font-size: 1.6rem;
+}
+
+#filter{
+    padding: 5px;
+    font-size: 1.4rem;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    width: 250px;
+    height: 50px;
+    text-align: center;
+    background-color: #3F82ED;
+    color: white;
+}
+
 /* テーブル */
 /* テーブル全体のスタイル */
-.center-table {
-    width: 90%;
-    border-collapse: collapse;
+.table-container {
+    overflow-x: auto;  /* 横スクロールを有効にする */
+    white-space: nowrap;  /* 折り返しを防ぐ */
+    -webkit-overflow-scrolling: touch;  /* スムーズなスクロールをサポート (モバイル) */
     margin-left: 40px;
+    margin-right: 40px;
+}
+
+.center-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
 /* ヘッダーのスタイル */
@@ -195,6 +243,8 @@ body {
     vertical-align: middle; /* 垂直方向に中央揃え */
     font-weight: normal;
     color: #4B4B4B;
+    font-size: 1.6rem;
+    white-space: nowrap;  /* テーブルヘッダーも折り返しを防ぐ */
 }
 
 /* データセルのスタイル */
@@ -206,7 +256,7 @@ body {
     vertical-align: middle; /* 垂直方向に中央揃え */
     font-weight: bold;
     color: #4B4B4B;
-    font-size: 24px;
+    font-size: 2.4rem;
 }
 
 /* ハンバーガーメニュー */
@@ -228,6 +278,20 @@ body {
     .site-icon {
         width: 100px;
         height: 100px;
+    }
+
+    /* テーブル */
+    .center-table td{
+        font-size: 1.8rem;
+    }
+
+    /* 絞り込み */
+    #filter-form{
+        margin-left: 0px;
+        width: 40%;
+    }
+    #sort-form{
+        width: 40%;
     }
 }
 
@@ -256,6 +320,11 @@ body {
     }
 
     /* テーブル */
+    .table-container{
+        width: 90%;
+        margin: auto;
+    }
+
     .center-table {
         margin: auto;
     }
@@ -263,13 +332,39 @@ body {
     /* タイトル */
     .main-content h1 {
         margin: auto;
-        padding-top: 45px;
-        padding-bottom: 45px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        font-size: 2.8rem;
     }
 
     /* 検索バー */
     .main-header-container{
         width: 90%;
         margin: auto;
+    }
+
+    /* 検索バー フィルター */
+    .sort-container {
+        display: block;
+        width: 90%;
+        margin: auto;
+    }
+
+    /* 絞り込み */
+    #filter-form{
+        margin-left: 0px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    #filter{
+        padding: 5px;
+        font-size: 1.4rem;
+        height: 30px;
+    }
+
+    /* 並び替え */
+    #sort-form{
+        width: 100%;
     }
 }
