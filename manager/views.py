@@ -72,3 +72,4 @@ def handle_image_message(event):
         message_id=message_id,   # メッセージIDを設定
         message_type=message_type  # メッセージタイプを設定
     )
+
