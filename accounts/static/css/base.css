@@ -1,0 +1,114 @@
+html { font-size: 62.5%; }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+}
+
+/* サイドバー */
+.sidebar {
+    width: 300px;
+    color: #4B4B4B;
+    height: 100vh;
+    position: fixed;
+    background-color: white;
+}
+
+.sidebar-header {
+    align-items: center;
+    margin-bottom: 60px;
+    margin-top: 90px;
+}
+
+.site-icon-container{
+    text-align: center;
+}
+
+.site-name-container{
+    text-align: center;
+    margin-top: 28px;
+}
+
+.site-icon {
+    width: 130px;
+    height: 130px;
+    display: inline;
+}
+
+.site-name {
+    font-size: 2.4rem;
+    font-weight: bold;
+}
+.sidebar ul {
+    list-style: none;
+    width: 80%;
+    margin: auto;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+    font-size: 1.6rem;
+}
+
+.sidebar ul li a {
+    color: #4B4B4B;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.sidebar ul li a:hover {
+    color: #3F82ED;
+}
+
+.sidebar ul li .btn{
+    color: #4B4B4B;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: none;  /* buttonタグの場合、デフォルトのボーダーを削除 */
+    cursor: pointer;  /* buttonタグにマウスカーソルを追加 */
+    background-color: transparent;
+    font-size: 16px;
+}
+
+.sidebar ul li .btn:hover {
+    color: #2980b9;
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* メインメニュー */
+.main-content {
+    margin-left: 300px; 
+    flex-grow: 1;
+    background-color: #BCCDE5; 
+    min-height: 100vh; 
+    width: 100%;
+}
+
+.main-content h1,.main-content h2 {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #808287;
+    width: 90%;
+    font-size: 3.2rem;
+    color: #4B4B4B;
+    margin-left: 40px;
+    padding-top: 45px;
+    padding-bottom: 45px;
+}

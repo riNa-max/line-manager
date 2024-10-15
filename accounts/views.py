@@ -2,8 +2,7 @@ from django.contrib.auth.views import LoginView
 from .forms import LoginForm
 
 from django.urls import reverse_lazy
-from django.views.generic import ListView
-from .models import Account
+from django.views.generic import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.views import LogoutView
@@ -18,6 +17,9 @@ from django.utils import timezone
 from linebot import LineBotApi
 from linebot.models import TextSendMessage
 from config.settings import LINE_ACCESS_TOKEN,LINE_USER_ID
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 
 class AccountLoginView(LoginView):
     template_name='login.html'
@@ -39,40 +41,39 @@ def notify_inactive_users_to_admin(inactive_users):
 
     line_bot_api.push_message(admin_line_id, TextSendMessage(text=message))
 
-# プロフィール名の更新を反映
-def update_all_line_profiles():
-    accounts = LineAccount.objects.all()  # すべてのLINEアカウントを取得
-    updated_accounts = []
+# 編集画面を表示するビュー
+def edit_line_username(request, user_id):
+    user = get_object_or_404(LineAccount, user_id=user_id)
+    context = {
+        'user': user
+    }
+    return render(request, 'edit_line_username.html', context)
 
-    for account in accounts:
-        try:
-            profile = line_bot_api.get_profile(account.user_id)
-            display_name = profile.display_name
+# ユーザー名の更新処理を行うビュー
+def update_line_username(request, user_id):
+    if request.method == 'POST':
+        account = get_object_or_404(LineAccount, user_id=user_id)
+        new_display_name = request.POST.get('display_name')
 
-            if account.display_name != display_name:
-                account.display_name = display_name
-                account.save()
-                updated_accounts.append(account.display_name) 
+        if new_display_name and account.display_name != new_display_name:
+            account.display_name = new_display_name
+            account.save()
 
-        except LineAccount.DoesNotExist:
-            continue
-        except Exception as e:
-            print(f"Error updating profile for user_id {account.user_id}: {e}")
-    
-    return updated_accounts
+    return redirect('dashboard') 
+
 
 @method_decorator(login_required(login_url='/'), name='dispatch')
-class DashboardView(ListView):
+class DashboardView(View):
     template_name='dashboard.html'
-    model=Account
 
-    def get_context_data(self, **kwargs):
+    def get(self, request, *args, **kwargs):
+        context = {}
+
         # 団体名の表示
-        context = super().get_context_data(**kwargs)
-        context['current_user'] = self.request.user
+        context['current_user'] = request.user
 
         # 並び替えフィルター
-        sort_option = self.request.GET.get('sort', 'name-asc')
+        sort_option = request.GET.get('sort', 'name-asc')
         if sort_option == 'name-asc':
             line_users = LineAccount.objects.all().order_by('display_name')
         elif sort_option == 'latest-date':
@@ -80,7 +81,7 @@ class DashboardView(ListView):
         context['sort_option'] = sort_option
 
         # 検索バー
-        query = self.request.GET.get('q','')
+        query = request.GET.get('q','')
         if query:
             line_users = LineAccount.objects.filter(display_name__icontains=query)
         else:
@@ -88,7 +89,7 @@ class DashboardView(ListView):
         context['search_query'] = query
 
         # 絞り込みフィルター
-        filter_option = self.request.GET.get('filter', None)
+        filter_option = request.GET.get('filter', None)
         three_months_ago = timezone.now() - timedelta(days=90)
 
         users_with_last_message = []
@@ -101,7 +102,8 @@ class DashboardView(ListView):
                     user_data ={
                         'user': user.display_name,
                         'last_sent_date': last_message.last_sent_date,
-                        'created_at': user.created_at
+                        'created_at': user.created_at,
+                        'user_id':user.user_id
                     }
                     users_with_last_message.append(user_data)
                     inactive_users.append(user_data)
@@ -112,20 +114,17 @@ class DashboardView(ListView):
                 users_with_last_message.append({
                     'user': user.display_name,
                     'last_sent_date': last_message.last_sent_date if last_message else None,  # 最終送信日がなければNone
-                    'created_at': user.created_at
+                    'created_at': user.created_at,
+                    'user_id':user.user_id
                 })
         context['users_with_last_message'] = users_with_last_message
         context['filter_option'] = filter_option
 
-        # 管理者に通知する（該当ユーザーがいる場合）
-        if filter_option == 'over_three_months':
-            notify_inactive_users_to_admin(inactive_users)
-
-        # プロフィール名を更新する関数を呼び出し
-        updated_accounts = update_all_line_profiles()
-        context['updated_accounts'] = updated_accounts
-
-        return context
+        return render(request, self.template_name, context)
 
 class LogoutView(LogoutView):
     template_name='logout.html'
+
+#設定画面
+def settings_view(request):
+    return render(request, 'setting.html')

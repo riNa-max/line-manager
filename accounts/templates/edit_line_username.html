@@ -1,0 +1,42 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名前の編集</title>
+    <link href="{%static 'css/update_line_username.css'%}" rel="stylesheet">
+</head>
+
+<body>
+    {%block header%}
+    <header>
+        <div class="header-content">
+            <img src="{% static 'images/cat_icon_white.png' %}" alt="サイトアイコン" class="site-icon">
+            <p>モールス</p>
+        </div>
+    </header>
+    {%endblock header%}
+
+    {%block content%}
+    <div class="main-content">
+        <h2>LINEユーザー名の編集</h2>
+        <p>姓・名（ペットの名前）に変えてください。</p>
+        <form action="{% url 'update_line_username' user.user_id %}" method="POST">
+            {% csrf_token %}
+            <input type="text" id="display_name" name="display_name" value="{{ user.display_name }}" placeholder="例：山田太郎（ぽち）" required>
+            <div class="button-container">
+                <button type="submit" class="save-button">変更する</button>
+                <a href="{% url 'dashboard' %}" class="back-button">管理画面に戻る</a>
+            </div>
+        </form>
+        
+    </div>
+    
+    {%endblock content%}
+
+    {%block footer%}
+    {%endblock footer%}
+</body>
+

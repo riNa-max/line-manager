@@ -1,0 +1,22 @@
+    {% extends 'base.html' %}
+    {% block title %}Setting{% endblock %}
+    {%load static%}
+
+    {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/setting.css' %}">
+    {% endblock %}
+
+    {%block content%}
+    <div class="main-content">
+        <h2>アカウントの設定</h2>
+        <div class="settings">
+            <form method="post" action="{% url 'logout' %}" class="logout">
+                {% csrf_token %}
+                <button type="submit btn" class="btn">ログアウト</button>
+            </form>
+        </div>
+        
+    </div>
+    
+    {%endblock content%}
+

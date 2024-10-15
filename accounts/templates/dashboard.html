@@ -1,39 +1,13 @@
-{%load static%}
+    {% extends 'base.html' %}
+    {% block title %}Dashboard{% endblock %}
+    {%load static%}
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ダッシュボード</title>
-    <link href="{%static 'css/dashboard.css'%}" rel="stylesheet">
-</head>
-<body>
+
+    {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    {% endblock %}
 
     {%block content%}
-
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="site-icon-container">
-                <img src="{% static 'images/cat_icon.png' %}" alt="サイトアイコン" class="site-icon">
-            </div>
-            <div class="site-name-container">
-                <span class="site-name">{{ current_user.username }}</span>
-            </div>
-        </div>
-        <ul>
-            <li><a href="#"><img src="{% static 'images/human_icon.png' %}" alt="ホームアイコン" class="icon">ホーム</a></li>
-            <li><a href="#">ユーザ管理</a></li>
-            <li><a href="#">設定</a></li>
-            <li>
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit btn" class="btn">ログアウト</button>
-                </form>
-            </li>
-        </ul>
-    </div>
-
     <div class="main-content">
         <div class="main-header">
             <div class="main-header-container">
@@ -70,17 +44,18 @@
                 <thead>
                     <tr>
                         <th>LINEユーザー名</th>
-                        <!-- <th>猫の名前</th> -->
+                        <th></th>
                         <th>最終送信日</th>
-                        <!-- <th>前回送信日</th> -->
                         <th>登録日</th>
-                        <!-- <th>氏名←追加時の情報入力でとってくる</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     {% for user_data in users_with_last_message %}
                         <tr>
                             <td>{{ user_data.user }}</td>
+                            <td class="center-align">
+                                <button onclick="location.href='{% url 'edit_line_username' user_data.user_id %}'" class="btn">編集</button>
+                            </td>
                             <td>{% if user_data.last_sent_date %}{{ user_data.last_sent_date|date:"Y年n月j日" }}{% else %}未送信{% endif %}</td>
                             <td>{{ user_data.created_at|date:"Y年n月j日" }}</td>
                         </tr>
@@ -89,14 +64,4 @@
             </table>
         </div>
     </div>
-
-
-
-    <!-- js読み込み用コード -->
-    <script src="{%static 'js/dashboard.js'%}"></script>
     {%endblock content%}
-
-    {%block footer%}
-    {%endblock footer%}
-</body>
-</html>

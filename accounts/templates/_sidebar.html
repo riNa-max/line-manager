@@ -1,0 +1,16 @@
+{% load static %}
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="site-icon-container">
+            <img src="{% static 'images/cat_icon.png' %}" alt="サイトアイコン" class="site-icon">
+        </div>
+        <div class="site-name-container">
+            <span class="site-name">{{ current_user.username }}</span>
+        </div>
+    </div>
+    <ul>
+        <li><a href="{% url 'dashboard' %}">ユーザ管理</a></li>
+        <li><a href="{% url 'settings' %}">設定</a></li>
+    </ul>
+</div>
