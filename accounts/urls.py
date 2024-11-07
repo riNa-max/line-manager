@@ -8,4 +8,6 @@ urlpatterns=[
     path('edit-line-username/<str:user_id>/', edit_line_username, name='edit_line_username'),
     path('update-line-username/<str:user_id>/', update_line_username, name='update_line_username'),
     path('settings/', settings_view, name='settings'),
+    path('notify_inactive_users/', DashboardView.as_view(), name='notify_inactive_users'),
+    
 ]

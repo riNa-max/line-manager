@@ -8,6 +8,7 @@ from linebot.models import MessageEvent,TextMessage,ImageMessage
 from config.settings import LINE_ACCESS_TOKEN,LINE_SECRET_KEY
 
 from .models import LineAccount,LineMessage
+from accounts.models import Account
 
 line_bot_api=LineBotApi(LINE_ACCESS_TOKEN)
 handler=WebhookHandler(LINE_SECRET_KEY)
@@ -72,4 +73,3 @@ def handle_image_message(event):
         message_id=message_id,   # メッセージIDを設定
         message_type=message_type  # メッセージタイプを設定
     )
-

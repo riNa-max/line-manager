@@ -21,6 +21,7 @@ from config.settings import LINE_ACCESS_TOKEN,LINE_USER_ID
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 
+
 class AccountLoginView(LoginView):
     template_name='login.html'
     form_class=LoginForm
@@ -61,6 +62,8 @@ def update_line_username(request, user_id):
 
     return redirect('dashboard') 
 
+line_bot_api=LineBotApi(LINE_ACCESS_TOKEN)
+admin_user_id = LINE_USER_ID
 
 @method_decorator(login_required(login_url='/'), name='dispatch')
 class DashboardView(View):
@@ -72,25 +75,29 @@ class DashboardView(View):
         # 団体名の表示
         context['current_user'] = request.user
 
+        # ログイン中のユーザーのLineAccountを取得
+        user_line_accounts = request.user.line_accounts.all()
+        context['line_accounts'] = user_line_accounts
+
         # 並び替えフィルター
         sort_option = request.GET.get('sort', 'name-asc')
         if sort_option == 'name-asc':
-            line_users = LineAccount.objects.all().order_by('display_name')
+            line_users = user_line_accounts.order_by('display_name')
         elif sort_option == 'latest-date':
-            line_users = LineAccount.objects.annotate(last_sent=Max('linemessage__last_sent_date')).order_by('-last_sent')
+            line_users = user_line_accounts.annotate(last_sent=Max('linemessage__last_sent_date')).order_by('-last_sent')
         context['sort_option'] = sort_option
 
         # 検索バー
         query = request.GET.get('q','')
         if query:
-            line_users = LineAccount.objects.filter(display_name__icontains=query)
+            line_users = user_line_accounts.filter(display_name__icontains=query)
         else:
-            line_users = LineAccount.objects.all()
+            line_users = user_line_accounts
         context['search_query'] = query
 
         # 絞り込みフィルター
         filter_option = request.GET.get('filter', None)
-        three_months_ago = timezone.now() - timedelta(days=90)
+        three_months_ago = timezone.now() - timedelta(days=10)
 
         users_with_last_message = []
         inactive_users = [] 
@@ -120,7 +127,34 @@ class DashboardView(View):
         context['users_with_last_message'] = users_with_last_message
         context['filter_option'] = filter_option
 
+        # if filter_option == 'over_three_months':
+        #     notify_inactive_users_to_admin(inactive_users)
+            
         return render(request, self.template_name, context)
+    
+    def post(self, request, *args, **kwargs):
+        # 3か月以上メッセージを送信していないユーザーを通知する処理
+        three_months_ago = timezone.now() - timedelta(days=90)
+        inactive_users = LineAccount.objects.filter(
+            linemessage__last_sent_date__lt=three_months_ago
+        ).distinct()
+
+        # 名簿作成
+        if inactive_users.exists():
+            user_list = "\n".join([f"{user.display_name}" for user in inactive_users])
+            message_text = f"3ヶ月以上メッセージを送信していないユーザー:\n{user_list}"
+        else:
+            message_text = "3ヶ月以上メッセージを送信していないユーザーはいません。"
+
+        # 管理者にLINE通知を送信
+        try:
+            line_bot_api.push_message(admin_user_id, TextSendMessage(text=message_text))
+            messages.success(request, '管理者に通知を送信しました。')
+        except Exception as e:
+            messages.error(request, f"通知の送信中にエラーが発生しました: {e}")
+            print(f"エラー発生: {e}")
+
+        return redirect('dashboard')
 
 class LogoutView(LogoutView):
     template_name='logout.html'

@@ -6,11 +6,18 @@
             <img src="{% static 'images/cat_icon.png' %}" alt="サイトアイコン" class="site-icon">
         </div>
         <div class="site-name-container">
-            <span class="site-name">{{ current_user.username }}</span>
+            <!-- <span class="site-name">{{ current_user.username }}</span> -->
+            <span class="site-name">{{ request.user.username }}</span>
         </div>
     </div>
     <ul>
         <li><a href="{% url 'dashboard' %}">ユーザ管理</a></li>
+        <li>
+            <form method="post" action="{% url 'notify_inactive_users' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning">通知の送信</button>
+            </form>
+        </li>
         <li><a href="{% url 'settings' %}">設定</a></li>
     </ul>
 </div>

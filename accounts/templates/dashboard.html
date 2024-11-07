@@ -54,7 +54,7 @@
                         <tr>
                             <td>{{ user_data.user }}</td>
                             <td class="center-align">
-                                <button onclick="location.href='{% url 'edit_line_username' user_data.user_id %}'" class="btn">編集</button>
+                                <a href="{% url 'edit_line_username' user_data.user_id %}" class="btn">編集</a>
                             </td>
                             <td>{% if user_data.last_sent_date %}{{ user_data.last_sent_date|date:"Y年n月j日" }}{% else %}未送信{% endif %}</td>
                             <td>{{ user_data.created_at|date:"Y年n月j日" }}</td>

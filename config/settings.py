@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'accounts',
-    'manager'
+    'manager',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +129,5 @@ LOGOUT_REDIRECT_URL = '/logout/'  # ログアウト後にリダイレクトさ�
 LINE_SECRET_KEY=env('LINE_SECRET_KEY')
 LINE_ACCESS_TOKEN=env('LINE_ACCESS_TOKEN')
 LINE_USER_ID=env('LINE_USER_ID')
+
+
