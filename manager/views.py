@@ -14,13 +14,16 @@ from accounts.models import Account
 class Linewebhook(View):
     def post(self,request,channel_id,*args,**kwargs):
 
-        line_bot_api=LineBotApi(request.user.access_token)
-        handler=WebhookHandler(request.user.secret_key)
+        try:
+            account=Account.objects.get(channel_id=channel_id)
+        except:
+            return HttpResponse(status=400)
+
+        line_bot_api=LineBotApi(account.access_token)
+        handler=WebhookHandler(account.secret_key)
 
         signature=request.headers["X-Line-Signature"]
         body=request.body.decode("utf-8")
-
-        account=Account.objects.get(channel_id=channel_id)
 
         try:
             events=handler.parser.parse(body,signature)
