@@ -34,10 +34,12 @@ def notify_inactive_users_to_admin(request,inactive_users):
     admin_line_id = request.user.line_user_id
     secret_key=request.user.secret_key
 
+# trueにしてみる
     if not line_access_token or not admin_line_id or not secret_key:
         # トークンまたはユーザーID、シークレットキーが設定されていない場合は処理を終了
         print(f"{request.user} は LINE の設定が不足しているため、通知をスキップしました。")
         return redirect('dashboard')
+
 
     line_bot_api=LineBotApi(request.user.access_token)
     
@@ -79,17 +81,6 @@ class DashboardView(View):
 
         # 団体名の表示
         context['current_user'] = request.user
-
-        # LINEの設定チェック
-        line_access_token = getattr(request.user, 'line_access_token', None)
-        admin_line_id = getattr(request.user, 'line_user_id', None)
-        secret_key = getattr(request.user, 'line_secret_key', None)
-
-        if not line_access_token or not admin_line_id or not secret_key:
-            # トークン、ユーザーID、またはシークレットキーが設定されていない場合は通知処理をスキップ
-            messages.warning(request, "LINE設定が不足しているため、通知機能は利用できません。")
-            # ダッシュボードをそのまま表示
-            return render(request, self.template_name, context)
 
         # ログイン中のユーザーのLineAccountを取得
         user_line_accounts = request.user.line_accounts.all()
@@ -142,10 +133,22 @@ class DashboardView(View):
                 })
         context['users_with_last_message'] = users_with_last_message
         context['filter_option'] = filter_option
+
+        notify_inactive_users_to_admin(request,inactive_users)
             
         return render(request, self.template_name, context)
     
     def post(self, request, *args, **kwargs):
+
+        line_access_token = request.user.access_token
+        admin_line_id = request.user.line_user_id
+        secret_key=request.user.secret_key
+
+        if not line_access_token or not admin_line_id or not secret_key:
+        # トークンまたはユーザーID、シークレットキーが設定されていない場合は処理を終了
+            print(f"{request.user} は LINE の設定が不足しているため、通知をスキップしました。")
+            return redirect('dashboard')
+
 
         line_bot_api=LineBotApi(request.user.access_token)
         admin_user_id = request.user.line_user_id
