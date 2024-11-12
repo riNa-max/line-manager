@@ -5,23 +5,15 @@ import environ
 env=environ.Env()
 env.read_env('.env')
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-if%cy82(#kl_d_2u0g%l=4+_btb%t)lqpfsh!e%0o#o(s-7m$e'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-
-# Application definition
+CSRF_TRUSTED_ORIGINS=["https://mo-rusu.com"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
