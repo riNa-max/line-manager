@@ -2,3 +2,4 @@ Django
 line-bot-sdk
 Pillow
 django-environ
+django_crontab
