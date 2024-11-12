@@ -133,8 +133,6 @@ class DashboardView(View):
                 })
         context['users_with_last_message'] = users_with_last_message
         context['filter_option'] = filter_option
-
-        notify_inactive_users_to_admin(request,inactive_users)
             
         return render(request, self.template_name, context)
     
