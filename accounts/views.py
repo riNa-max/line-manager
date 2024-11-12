@@ -16,11 +16,9 @@ from django.utils import timezone
 
 from linebot import LineBotApi
 from linebot.models import TextSendMessage
-from config.settings import LINE_ACCESS_TOKEN,LINE_USER_ID
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-
 
 class AccountLoginView(LoginView):
     template_name='login.html'
@@ -28,12 +26,21 @@ class AccountLoginView(LoginView):
 
     def get_success_url(self):
         return reverse_lazy('dashboard')
-    
-line_bot_api=LineBotApi(LINE_ACCESS_TOKEN)
 
 # 管理者に通知する関数
-def notify_inactive_users_to_admin(inactive_users):
-    admin_line_id = LINE_USER_ID
+def notify_inactive_users_to_admin(request,inactive_users):
+
+    line_access_token = request.user.access_token
+    admin_line_id = request.user.line_user_id
+    secret_key=request.user.secret_key
+
+    if not line_access_token or not admin_line_id or not secret_key:
+        # トークンまたはユーザーID、シークレットキーが設定されていない場合は処理を終了
+        print(f"{request.user} は LINE の設定が不足しているため、通知をスキップしました。")
+        return redirect('dashboard')
+
+    line_bot_api=LineBotApi(request.user.access_token)
+    
     if inactive_users:
         user_names = [user['user'] for user in inactive_users]
         message = f"以下のユーザーは3か月以上メッセージを送信していません:\n" + "\n".join(user_names)
@@ -62,18 +69,27 @@ def update_line_username(request, user_id):
 
     return redirect('dashboard') 
 
-line_bot_api=LineBotApi(LINE_ACCESS_TOKEN)
-admin_user_id = LINE_USER_ID
-
 @method_decorator(login_required(login_url='/'), name='dispatch')
 class DashboardView(View):
     template_name='dashboard.html'
 
     def get(self, request, *args, **kwargs):
+
         context = {}
 
         # 団体名の表示
         context['current_user'] = request.user
+
+        # LINEの設定チェック
+        line_access_token = getattr(request.user, 'line_access_token', None)
+        admin_line_id = getattr(request.user, 'line_user_id', None)
+        secret_key = getattr(request.user, 'line_secret_key', None)
+
+        if not line_access_token or not admin_line_id or not secret_key:
+            # トークン、ユーザーID、またはシークレットキーが設定されていない場合は通知処理をスキップ
+            messages.warning(request, "LINE設定が不足しているため、通知機能は利用できません。")
+            # ダッシュボードをそのまま表示
+            return render(request, self.template_name, context)
 
         # ログイン中のユーザーのLineAccountを取得
         user_line_accounts = request.user.line_accounts.all()
@@ -126,15 +142,16 @@ class DashboardView(View):
                 })
         context['users_with_last_message'] = users_with_last_message
         context['filter_option'] = filter_option
-
-        # if filter_option == 'over_three_months':
-        #     notify_inactive_users_to_admin(inactive_users)
             
         return render(request, self.template_name, context)
     
     def post(self, request, *args, **kwargs):
+
+        line_bot_api=LineBotApi(request.user.access_token)
+        admin_user_id = request.user.line_user_id
+
         # 3か月以上メッセージを送信していないユーザーを通知する処理
-        three_months_ago = timezone.now() - timedelta(days=90)
+        three_months_ago = timezone.now() - timedelta(days=10)
         inactive_users = LineAccount.objects.filter(
             linemessage__last_sent_date__lt=three_months_ago
         ).distinct()

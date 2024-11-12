@@ -33,6 +33,8 @@ INSTALLED_APPS = [
 
     'accounts',
     'manager',
+
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +133,6 @@ LINE_ACCESS_TOKEN=env('LINE_ACCESS_TOKEN')
 LINE_USER_ID=env('LINE_USER_ID')
 
 
+CRONJOBS = [
+    ('0 1 * * *', 'django.core.management.call_command', ['notify_inactive_users']),
+]
