@@ -13,3 +13,48 @@
     cursor: pointer;
     text-align: left;
 }
+
+.main-header{
+    height: 100px;
+    background-color: #3F82ED;
+    align-items: center;
+}
+
+.menu-icon {
+    font-size: 30px;
+    cursor: pointer;
+    display: none;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.main-header-container{
+    width: 90%;
+    margin: auto;
+}
+
+/* スマホ */
+@media (max-width: 430px) {
+
+    /* ハンバーガーメニュー */
+    .menu-icon {
+        display: block;
+        position: absolute;
+        z-index: 10000;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        width: 100%;
+        transition: transform 0.5s ease;
+    }
+
+    .sidebar.active {
+        transform: translateX(0); 
+    }
+
+    .main-content {
+        margin-left: 0px; 
+    }
+
+}

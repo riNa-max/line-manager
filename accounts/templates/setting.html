@@ -8,6 +8,11 @@
 
     {%block content%}
     <div class="main-content">
+        <div class="main-header">
+            <div class="main-header-container">
+                <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+            </div>
+        </div>
         <h2>アカウントの設定</h2>
         <div class="settings">
             <form method="post" action="{% url 'logout' %}" class="logout">
