@@ -27,6 +27,11 @@ class AccountLoginView(LoginView):
     def get_success_url(self):
         return reverse_lazy('dashboard')
 
+
+    def form_invalid(self, form):
+        messages.error(self.request, "ログインに失敗しました。ユーザー名とパスワードを確認してください。")
+        return super().form_invalid(form)
+
 # 管理者に通知する関数
 def notify_inactive_users_to_admin(request,inactive_users):
 
