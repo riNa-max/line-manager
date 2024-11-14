@@ -39,9 +39,7 @@ def notify_inactive_users_to_admin(request,inactive_users):
     admin_line_id = request.user.line_user_id
     secret_key=request.user.secret_key
 
-# trueにしてみる
     if not line_access_token or not admin_line_id or not secret_key:
-        # トークンまたはユーザーID、シークレットキーが設定されていない場合は処理を終了
         print(f"{request.user} は LINE の設定が不足しているため、通知をスキップしました。")
         return redirect('dashboard')
 

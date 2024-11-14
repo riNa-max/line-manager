@@ -128,3 +128,4 @@ LINE_USER_ID=env('LINE_USER_ID')
 CRONJOBS = [
     ('0 1 * * *', 'django.core.management.call_command', ['notify_inactive_users']),
 ]
+
